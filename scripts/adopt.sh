@@ -122,6 +122,7 @@ TARGET=""
 AGENT="claude-code"
 FEATURES=""
 GITHUB_WIKI=0    # opt-in to the GitHub Wiki bootstrap dance (Phase 2B sub-step)
+MONDO=""         # MONDO ontology ID, threaded through to init-wiki.sh --mondo
 
 usage() {
     cat <<'EOF'
@@ -161,6 +162,9 @@ Options:
                      to a local-only wiki. Re-run --github-wiki after the
                      manual UI step to complete the migration. Non-GitHub
                      origins (or no origin) are soft-skipped.
+  --mondo=ID         MONDO ontology ID for the project (e.g. MONDO:0013885);
+                     passed through to wiki/init-wiki.sh --mondo, spliced
+                     into the Home page frontmatter at creation
   --dry-run          Default; included for forward compatibility
   --help, -h         Show this help
 
@@ -182,6 +186,8 @@ while [[ $# -gt 0 ]]; do
         --features=*)         FEATURES="${1#*=}"; shift ;;
         --features)           FEATURES="${2:-}"; shift 2 ;;
         --github-wiki)        GITHUB_WIKI=1; shift ;;
+        --mondo=*)            MONDO="${1#*=}"; shift ;;
+        --mondo)               MONDO="${2:-}"; shift 2 ;;
         *)                    lw_die "unknown argument: $1" ;;
     esac
 done
@@ -637,6 +643,10 @@ elif [[ -f "$TARGET/wiki/init-wiki.sh" ]]; then
     # failure path the args stay bare and init-wiki falls back to local
     # init (current behaviour, fully backward compatible).
     init_wiki_args=(--repo-name "$PROJECT_NAME")
+
+    if [[ -n "$MONDO" ]]; then
+        init_wiki_args+=(--mondo "$MONDO")
+    fi
 
     if [[ "$GITHUB_WIKI" -eq 1 ]]; then
         _origin=$(lw_origin_url "$TARGET" 2>/dev/null || true)
