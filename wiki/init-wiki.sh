@@ -240,7 +240,8 @@ cat > "$WIKI_DIR/${HOME_NS}.md" << HOMEEOF
 ---
 type: index
 up: "[[WIKI-INDEX]]"
-created: "$(date +%Y-%m-%d)"${MONDO_LINE}
+created: "$(date +%Y-%m-%d)"
+timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"${MONDO_LINE}
 ---
 
 # ${PROJECT_NAME}
@@ -287,6 +288,7 @@ cat > "$WIKI_DIR/${INDEX_NS}.md" << INDEXEOF
 type: index
 up: "[[${HOME_NS}]]"
 created: "$(date +%Y-%m-%d)"
+timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ---
 
 # Index — ${PROJECT_NAME}
@@ -307,6 +309,7 @@ cat > "$WIKI_DIR/${LOG_NS}.md" << LOGEOF
 type: index
 up: "[[${HOME_NS}]]"
 created: "$(date +%Y-%m-%d)"
+timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ---
 
 # Log — ${PROJECT_NAME}
@@ -337,6 +340,7 @@ if [[ "$MODE" == "create" ]]; then
 type: reference
 up: "[[${HOME_NS}]]"
 created: "$(date +%Y-%m-%d)"
+timestamp: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ---
 
 # Wiki Schema — ${PROJECT_NAME}
